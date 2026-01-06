@@ -2,7 +2,7 @@
 
 Levent Şen
 
-Summary: Flowchart
+
 
 The process works as follows:
 
