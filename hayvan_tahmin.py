@@ -7,7 +7,6 @@ from PIL import Image
 import json
 import sys
 
-# Ayarlar
 IMG_SIZE = 160
 MODEL_PATH = 'hayvan_taniyici_model.keras'
 CLASS_NAMES_PATH = 'class_names.json'
@@ -112,7 +111,7 @@ def load_model():
         print(f"HATA: Model dosyası bulunamadı: {MODEL_PATH}")
         sys.exit(1)
     
-    print("Model yükleniyor...")
+    print("Model yükleniyor")
     model = tf.keras.models.load_model(MODEL_PATH)
     print("Model başarıyla yüklendi!")
     return model
@@ -145,9 +144,7 @@ def preprocess_image(image_path):
     return img_array
 
 
-def predict_animal(model, class_names, image_path):
-    """Görüntüdeki hayvanı tahmin et"""
-    
+def predict_animal(model, class_names, image_path):    
     img_array = preprocess_image(image_path)   
     predictions = model.predict(img_array, verbose=0)   
     top_indices = np.argsort(predictions[0])[::-1][:5]
@@ -167,7 +164,6 @@ def predict_animal(model, class_names, image_path):
 
 
 def print_results(results, image_path):
-    """Sonuçları güzel formatta yazdır"""
     print("\n" + "="*50)
     print(f"Görüntü: {os.path.basename(image_path)}")
     print("="*50)
@@ -186,9 +182,8 @@ def print_results(results, image_path):
 
 
 def interactive_mode(model, class_names):
-    """İnteraktif mod - kullanıcıdan sürekli görüntü al"""
     print("\n" + "="*50)
-    print("HAYVAN TANIYICI - İNTERAKTİF MOD")
+    print("HAYVAN TANIYICI")
     print("="*50)
     print("Görüntü yolunu girin veya çıkmak için 'q' yazın.\n")
     
@@ -196,7 +191,7 @@ def interactive_mode(model, class_names):
         image_path = input("Görüntü yolu: ").strip()
         
         if image_path.lower() in ['q', 'quit', 'exit', 'çık']:
-            print("Güle güle!")
+            print("Programdan çıkılıyor")
             break
         
         if not image_path:
@@ -215,14 +210,10 @@ def interactive_mode(model, class_names):
 
 
 def main():
-    """Ana fonksiyon"""
-    # Model ve sınıf isimlerini yükle
     model = load_model()
     class_names = load_class_names()
     
-    # Komut satırı argümanı kontrolü
     if len(sys.argv) > 1:
-        # Argüman olarak verilen görüntüyü tahmin et
         image_path = sys.argv[1]
         try:
             results = predict_animal(model, class_names, image_path)
@@ -231,7 +222,6 @@ def main():
             print(f"Hata: {e}")
             sys.exit(1)
     else:
-        # İnteraktif mod
         interactive_mode(model, class_names)
 
 
